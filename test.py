@@ -13,7 +13,7 @@ communities = cd.best_partition(layers=[posgraph, neggraph],
                                 k=2,
                                 initial_membership=None,
                                 weight='weight',
-                                random_state=None,
+                                random_state=42,
                                 pass_max=40,
                                 return_dendogram=False,
                                 silent=True)
