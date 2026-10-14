@@ -5,17 +5,16 @@
 
 
 import numbers
-import random as rd
 import time
-from collections import deque
 
 import networkx as nx
 import numpy as np
+from numpy.random import RandomState
 
 # In[ ]:
 
 
-def check_random_state(seed):
+def check_random_state(seed) -> RandomState:
     """
     Turns seed into a np.random.RandomState instance.
     ----------
@@ -41,6 +40,22 @@ def check_random_state(seed):
 
 
 class Wrapper(object):
+    random_state: RandomState
+    layers: list
+    nodes: list
+    weight: str  # label of the weight attribute
+    nb_layers: int
+    degrees: dict[int, dict]
+    gdegrees: dict[int, dict]
+    internals: dict
+    loops: dict
+    node2com: dict
+    k_hop_graph: dict
+    resolutions: list
+    layer_weights: list
+    total_weight: dict
+    consider_empty_community: bool
+
     def __init__(self):
         pass
 
@@ -210,7 +225,6 @@ class Wrapper(object):
         nb_pass_done = 0
         cur_mod = self.modularity()
         new_mod = cur_mod
-        weight_key = self.weight
 
         while modified and nb_pass_done < pass_max:
             cur_mod = new_mod
@@ -287,7 +301,7 @@ class Status(Wrapper):
         layer_weights,
         masks,
         consider_empty_community,
-        random_state=None,
+        random_state: RandomState,
         weight_label="weight",
     ):
         """
@@ -518,7 +532,7 @@ def generate_dendrogram(
     masks=[False, True],
     initial_membership=None,
     weight="weight",
-    random_state=None,
+    random_state: int | RandomState | None = None,
     pass_max=10,
     epsilon=1e-7,
     consider_empty_community=False,
@@ -577,7 +591,7 @@ def generate_dendrogram(
     if len(layers) != len(masks):
         raise TypeError("Graph list and mask list must be of same size.")
 
-    if type(k) != int or k == 0:
+    if not isinstance(k, int) or k == 0:
         raise TypeError("The exploration depth `k` must be a non-zero integer.")
 
     nodes = sorted(list(layers[0].nodes()))
@@ -692,7 +706,7 @@ def best_partition(
     masks=[False, True],
     initial_membership=None,
     weight="weight",
-    random_state=None,
+    random_state: int | RandomState | None = None,
     pass_max=10,
     epsilon=1e-7,
     return_dendogram=False,
