@@ -5,6 +5,7 @@
 
 
 import networkx as nx
+from networkx.classes.graph import Graph
 
 # In[ ]:
 
@@ -29,7 +30,7 @@ def build_nx_graph(n, edge_list):
 # In[ ]:
 
 
-def build_subgraphs(G, weight="weight"):
+def build_subgraphs(G, weight="weight")-> tuple[Graph,Graph]:
     """Build positive and negatives graphs."""
     pos_edges = [edge for edge in G.edges(data=True) if edge[2][weight] > 0]
     posG = nx.Graph()
